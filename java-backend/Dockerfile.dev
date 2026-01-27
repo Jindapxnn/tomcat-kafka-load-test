@@ -1,0 +1,12 @@
+FROM tomcat:11-jdk25-temurin-jammy
+
+# Prepare libraries
+ADD https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.4.0/kafka-clients-3.4.0.jar /usr/local/tomcat/lib/
+ADD https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar /usr/local/tomcat/lib/
+ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar /usr/local/tomcat/lib/
+
+# Setting Heap Size
+ENV CATALINA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC"
+
+# Expose port
+EXPOSE 8080

@@ -1,0 +1,11 @@
+microservices/
+├── docker-compose.yml         
+├── nginx/                     
+│   ├── Dockerfile
+│   └── default.conf           
+├── java-backend/              
+│   ├── Dockerfile
+│   ├── index.jsp              
+│   └── lib/                   
+└── postgres/                  
+    └── init.sql                

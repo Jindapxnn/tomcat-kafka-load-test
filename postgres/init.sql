@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    order_id VARCHAR(50) NOT NULL,
+    info TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
