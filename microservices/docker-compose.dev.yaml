@@ -1,3 +1,4 @@
+name: tomcat-kafka-dev
 services:
     postgres_db:
         image: postgres:18-alpine
