@@ -13,7 +13,7 @@ services:
             - "5432:5432"
         volumes:
             - tomcat-kafka_data:/var/lib/postgresql/data
-            - ./microservices/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
         networks:
             - tomcat-kafka_network
     kafka:
@@ -43,7 +43,7 @@ services:
         ports:
             - "8080:8080"
         volumes:
-            - ./microservices/java-backend/api.jsp:/usr/local/tomcat/webapps/ROOT/api.jsp
+            - ./java-backend/api.jsp:/usr/local/tomcat/webapps/ROOT/api.jsp
         depends_on:
             - postgres_db
             - kafka
