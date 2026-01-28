@@ -1,3 +1,21 @@
+<%! 
+    private static KafkaProducer<String, String> producer = null;
+
+    private synchronized KafkaProducer<String, String> getProducer() {
+        if (producer == null) {
+            Properties props = new Properties();
+            props.put("bootstrap.servers", "kafka:9092");
+            props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+            // Additional producer configurations for performance
+            props.put("acks", "1"); 
+            props.put("linger.ms", "5");
+            producer = new KafkaProducer<>(props);
+        }
+        return producer;
+    }
+%>
+
 <%@ page import="java.sql.*, java.util.Properties, org.apache.kafka.clients.producer.*" %>
 <%@ page contentType="application/json;charset=UTF-8" language="java" %>
 <%
@@ -31,15 +49,11 @@
         } else if ("mq".equals(type)) {
             // --- Logic: Kafka (Asynchronous) ---
             long startTime = System.currentTimeMillis();
-            Properties props = new Properties();
-            props.put("bootstrap.servers", "kafka:9092");
-            props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-            
-            try (KafkaProducer<String, String> producer = new KafkaProducer<>(props)) {
-                String message = "{\"order_id\": \"" + orderId + "\", \"timestamp\": " + startTime + "}";
-                producer.send(new ProducerRecord<>("orders-topic", orderId, message));
-            }
+            String message = "{\"order_id\": \"" + orderId + "\", \"timestamp\": " + startTime + "}";
+        
+            // Use Kafka Producer to send message
+            getProducer().send(new ProducerRecord<>("orders-topic", orderId, message));
+        
             long endTime = System.currentTimeMillis();
             jsonResponse.append("\"status\": \"success\", \"mode\": \"kafka\", \"latency_ms\": " + (endTime - startTime));
         }
