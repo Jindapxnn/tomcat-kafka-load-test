@@ -2,32 +2,59 @@ services:
     postgres_db:
         image: postgres:18-alpine
         container_name: tomcat-kafka_db
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.5'
+                    memory: 512M
         env_file:
             - .env.dev
         ports:
             - "5432:5432"
         volumes:
             - tomcat-kafka_data:/var/lib/postgresql/data
-            - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./microservices/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - tomcat-kafka_network
     kafka:
         image: apache/kafka:4.1.1
         container_name: tomcat-kafka_kafka
+        deploy:
+            resources:
+                limits:
+                    cpus: '1.0'
+                    memory: 1.5G
         env_file:
             - .env.dev
         ports:
-          - "9092:9092"
+            - "9092:9092"
+        networks:
+            - tomcat-kafka_network
     java-app:
         build:
             context: ./java-backend
             dockerfile: Dockerfile.dev
         container_name: tomcat-kafka_app
+        deploy:
+            resources:
+                limits:
+                    cpus: '1.5'
+                    memory: 1G
         ports:
             - "8080:8080"
         volumes:
-          - ./java-backend/api.jsp:/usr/local/tomcat/webapps/ROOT/api.jsp
+            - ./microservices/java-backend/api.jsp:/usr/local/tomcat/webapps/ROOT/api.jsp
         depends_on:
             - postgres_db
             - kafka
+        networks:
+            - tomcat-kafka_network
 
 volumes:
     tomcat-kafka_data:
+        name: tomcat-kafka_data
+
+networks:
+    tomcat-kafka_network:
+        name: tomcat-kafka_network
+        driver: bridge

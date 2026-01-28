@@ -3,3 +3,6 @@
 
 # IDE specific files
 .vscode/
+
+# K6
+k6/results/

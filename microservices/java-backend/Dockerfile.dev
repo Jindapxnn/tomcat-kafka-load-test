@@ -6,7 +6,7 @@ ADD https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.j
 ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar /usr/local/tomcat/lib/
 
 # Setting Heap Size
-ENV CATALINA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC"
+ENV CATALINA_OPTS="-Xms512m -Xmx716m -XX:+UseG1GC"
 
 # Expose port
 EXPOSE 8080
