@@ -24,7 +24,7 @@ services:
             resources:
                 limits:
                     cpus: '1.0'
-                    memory: 1.5G
+                    memory: 1536M
         env_file:
             - .env.dev
         ports:
@@ -40,7 +40,7 @@ services:
             resources:
                 limits:
                     cpus: '1.5'
-                    memory: 1G
+                    memory: 1024M
         ports:
             - "8080:8080"
         volumes:
